@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thời Khóa Biểu: Galaxy Ultra (Interactive)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <div class="loading-screen" id="loader"><div class="loader"><div class="loader-ring"></div><div class="loader-ring"></div><div class="loader-ring"></div></div></div>
+    <div class="cursor"></div>
+    <div class="canvas-container"><canvas id="aurora-canvas" class="canvas-layer"></canvas><canvas id="particle-canvas" class="canvas-layer"></canvas></div>
+    <div class="header"><h1>QUANTUM SCHEDULE</h1></div>
+    <div class="digital-clock" id="clock">00:00:00</div>
+    <div class="music-visualizer"><div class="bar"></div> <div class="bar"></div> <div class="bar"></div><div class="bar"></div> <div class="bar"></div></div>
+    
+    <div class="main-content">
+        <div class="timetable-wrapper">
+            <div class="mobile-nav">
+                <button class="nav-btn active" data-day="mon">T2</button>
+                <button class="nav-btn" data-day="tue">T3</button>
+                <button class="nav-btn" data-day="wed">T4</button>
+                <button class="nav-btn" data-day="thu">T5</button>
+                <button class="nav-btn" data-day="fri">T6</button>
+                <button class="nav-btn" data-day="sat">T7</button>
+                <button class="nav-btn" data-day="sun">CN</button>
+            </div>
+            <div class="timetable-container" id="timetable-container">
+                <div class="day-column" data-day="mon"><div class="day-header"><h2>Thứ Hai</h2><button class="add-event-btn" data-day="mon">+</button></div></div>
+                <div class="day-column" data-day="tue"><div class="day-header"><h2>Thứ Ba</h2><button class="add-event-btn" data-day="tue">+</button></div></div>
+                <div class="day-column" data-day="wed"><div class="day-header"><h2>Thứ Tư</h2><button class="add-event-btn" data-day="wed">+</button></div></div>
+                <div class="day-column" data-day="thu"><div class="day-header"><h2>Thứ Năm</h2><button class="add-event-btn" data-day="thu">+</button></div></div>
+                <div class="day-column" data-day="fri"><div class="day-header"><h2>Thứ Sáu</h2><button class="add-event-btn" data-day="fri">+</button></div></div>
+                <div class="day-column" data-day="sat"><div class="day-header"><h2>Thứ Bảy</h2><button class="add-event-btn" data-day="sat">+</button></div></div>
+                <div class="day-column" data-day="sun"><div class="day-header"><h2>Chủ Nhật</h2><button class="add-event-btn" data-day="sun">+</button></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="event-modal">
+        <div class="modal-content">
+            <h3 id="modal-title">Thêm Sự Kiện Mới</h3>
+            <form id="event-form">
+                <input type="hidden" id="event-day" name="day">
+                <input type="hidden" id="event-id" name="id">
+                
+                <!-- Các trường thông thường -->
+                <div id="normal-event-fields">
+                    <div class="form-group">
+                        <label for="event-time">Thời gian (vd: 8:00 - 10:00)</label>
+                        <input type="text" id="event-time" name="time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-title">Tên sự kiện</label>
+                        <input type="text" id="event-title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-location">Địa điểm</label>
+                        <input type="text" id="event-location" name="location">
+                    </div>
+                    <div class="form-group">
+                        <label for="event-type">Loại sự kiện</label>
+                        <select id="event-type" name="type">
+                            <option value="school">Trường học</option>
+                            <option value="tutor">Gia sư</option>
+                            <option value="personal">Cá nhân</option>
+                        </select>
+                    </div>
+                                    <!-- MỚI: Thêm 3 khối này vào -->
+                    <div class="form-group">
+                        <label for="event-teacher">Giáo viên (Tùy chọn)</label>
+                        <input type="text" id="event-teacher" name="teacher">
+                    </div>
+                    <div class="form-group">
+                        <label for="event-description">Mô tả (Tùy chọn)</label>
+                        <textarea id="event-description" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-link">Link tài liệu (Tùy chọn)</label>
+                        <input type="url" id="event-link" name="link" placeholder="https://...">
+                    </div>
+                    <!-- Kết thúc phần thêm mới -->
+                </div>
+
+                <!-- Trường cho sự kiện đặc biệt -->
+                <div id="special-event-fields" style="display: none;">
+                     <div class="form-group">
+                        <label for="special-text">Nội dung đặc biệt (dùng &lt;br&gt; để xuống dòng)</label>
+                        <input type="text" id="special-text" name="specialText" placeholder="✨<br>Relax Day!">
+                    </div>
+                </div>
+
+                <!-- Checkbox để chuyển đổi -->
+                <div class="form-group-checkbox">
+                    <input type="checkbox" id="is-special-event" name="isSpecial">
+                    <label for="is-special-event">Đây là sự kiện đặc biệt (Relax, Me Time...)</label>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="btn-cancel" id="cancel-btn">Hủy</button>
+                    <button type="submit" class="btn-save">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+        <!-- MODAL HIỂN THỊ CHI TIẾT SỰ KIỆN -->
+    <div class="modal-overlay" id="details-modal">
+        <div class="modal-content">
+            <h3 id="details-title">Tên Sự Kiện</h3>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Thời gian:</span>
+                    <span id="details-time"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Địa điểm:</span>
+                    <span id="details-location"></span>
+                </div>
+                <div class="detail-item" id="details-teacher-wrapper">
+                    <span class="detail-label">Giáo viên:</span>
+                    <span id="details-teacher"></span>
+                </div>
+                <div class="detail-item" id="details-description-wrapper">
+                    <span class="detail-label">Mô tả:</span>
+                    <span id="details-description"></span>
+                </div>
+            </div>
+            
+            <a href="#" target="_blank" class="btn-link" id="details-link">
+                <span>🔗</span> Tới link tài liệu
+            </a>
+
+            <div class="form-buttons">
+                <button type="button" class="btn-cancel" id="close-details-btn">Đóng</button>
+                <button type="button" class="btn-save" id="edit-event-btn">Sửa</button>
+            </div>
+        </div>
+    </div>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">attribute vec2 a_position; void main() { gl_Position = vec4(a_position, 0.0, 1.0); }</script>
+    <script id="fragment-shader" type="x-shader/x-fragment">precision highp float; uniform vec2 u_resolution; uniform float u_time; float random(vec2 st) { return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123); } float noise(vec2 st) { vec2 i = floor(st); vec2 f = fract(st); vec2 u = f * f * (3.0 - 2.0 * f); return mix(mix(random(i + vec2(0.0, 0.0)), random(i + vec2(1.0, 0.0)), u.x), mix(random(i + vec2(0.0, 1.0)), random(i + vec2(1.0, 1.0)), u.x), u.y); } void main() { vec2 uv = gl_FragCoord.xy / u_resolution.xy; float time = u_time * 0.1; float intensity = 0.0; intensity += noise(uv * 2.0 + vec2(time, 0.0)) * 0.5; intensity += noise(uv * 4.0 + vec2(-time, time * 0.5)) * 0.25; intensity += noise(uv * 8.0 + vec2(time * 1.5, -time)) * 0.125; intensity *= pow(abs(0.5 - uv.y), 0.5); vec3 color = vec3(0.0); color.g = intensity * 0.5; color.b = intensity * 1.0; color += vec3(intensity * 0.2, 0.0, intensity * 0.3); gl_FragColor = vec4(color, 1.0); }</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <script src="script.js" defer></script>
+</body>
+</html>
